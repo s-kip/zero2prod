@@ -5,7 +5,7 @@ async fn health_check_works() {
     let client = reqwest::Client::new();
 
     // Act
-    let response  = client
+    let response = client
         .get("http://127.0.0.8/health_check")
         .send()
         .await
@@ -16,6 +16,6 @@ async fn health_check_works() {
     assert_eq!(Some(0), response.content_length());
 }
 
-async fn spawn_app() -> Result<(), std::io::Error>{
+async fn spawn_app() -> Result<(), std::io::Error> {
     zero2prod::run().await
 }
