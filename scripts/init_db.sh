@@ -10,8 +10,7 @@ fi
 if ! [ -x "$(command -v sqlx)" ]; then
   echo >&2 "Error: sqlx is not installed."
   echo >&2 "Use:"
-  echo >&2 "    cargo install --version='~0.7' sqlx-cli \
---no-default-features --features rustls,postgres"
+  echo >&2 "    cargo install --version='~0.7' sqlx-cli --no-default-features --features rustls,postgres"
   echo >&2 "to install it."
   exit 1
 fi
@@ -23,14 +22,14 @@ DB_PORT="${POSTGRES_PORT:=5432}"
 DB_HOST="${POSTGRES_HOST:=localhost}"
 
 docker run \
-  -e POSTGRES_USER=$DB_USER \
-  -e POSTGRES_PASSWORD=$DB_PASSWORD \
-  -e POSTGRES_DB=$DB_NAME \
-  -p "{$DB_PORT}":5432 \
+  -e POSTGRES_USER="$DB_USER" \
+  -e POSTGRES_PASSWORD="$DB_PASSWORD" \
+  -e POSTGRES_DB="$DB_NAME" \
+  -p "$DB_PORT":5432 \
   -d postgres \
   postgres -N 1000
 
-export PGPASSWORT="${DB_PASSWORD}"
+export PGPASSWORD="${DB_PASSWORD}"
 until psql -h "${DB_HOST}" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q'; do
   echo >&2 echo "Postgres is still unavailable - sleeping"
   sleep 1
